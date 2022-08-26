@@ -1,3 +1,6 @@
+//text section for each layer
+let section = 0;
+
 L.Control.Layers.include({
     getCurrentLayer: function() {
       // create hash to hold all layers
@@ -66,6 +69,38 @@ L.NarrativeIntegration = L.Class.extend({
                 map.setView(center, zoom);
             }
         };
+
+        
+    },
+
+    readJSONData : function (id, dataPath){
+        var promises=[]
+        fetch(dataPath)
+            .then(res => res.json())
+            .then(data => {
+                data = data["es"];
+                for(i = 0; i< Object.keys(data).length;i++){
+                    for(j = 0; j< Object.keys(data[i]).length; j++){
+                        var promise = searchInText(id, data[i][j]);
+                        promises.push(promise);
+                    }
+                }
+                Promise.all(promises).then(values =>{
+                    for(let i= 0; i < values.length;i++){
+                        console.log(values);
+                        classes = document.getElementsByClassName(values[i][0]);
+                        for (let j = 0; j < classes.length; j++) {
+                            classes[j].style.background = textBgColor;
+                            classes[j].style.opacity = 0.7;
+                            classes[j].addEventListener("click", function(){map.flyTo([values[i][1], values[i][2]], 20);});
+                            classes[j].addEventListener("mouseover", function(){this.style.background = textBgHightlightColor;});
+                            classes[j].addEventListener("mouseleave", function(){this.style.background = textBgColor;});
+                        }
+                    }
+                    
+                });
+            })
+        
     }
 
 });
@@ -76,35 +111,7 @@ L.narrativeIntegration = function (){
 }
 
 
-function readJsonData(id, dataPath){
-    var promises=[]
-    fetch(dataPath)
-        .then(res => res.json())
-        .then(data => {
-            data = data["es"];
-            for(i = 0; i< Object.keys(data).length;i++){
-                for(j = 0; j< Object.keys(data[i]).length; j++){
-                    var promise = searchInText(id, data[i][j]);
-                    promises.push(promise);
-                }
-            }
-            Promise.all(promises).then(values =>{
-                for(let i= 0; i < values.length;i++){
-                    console.log(values);
-                    classes = document.getElementsByClassName(values[i][0]);
-                    for (let j = 0; j < classes.length; j++) {
-                        classes[j].style.background = "#EF5B47";
-                        classes[j].style.opacity = 0.7;
-                        classes[j].addEventListener("click", function(){map.flyTo([values[i][1], values[i][2]], 20);});
-                        classes[j].addEventListener("mouseover", function(){this.style.background = "#ed978c";});
-                        classes[j].addEventListener("mouseleave", function(){this.style.background = "#EF5B47";});
-                    }
-                }
-                
-            });
-        })
-    
-}
+
 
 
 
