@@ -11,6 +11,38 @@ Leaflet plugin for narrative integration
 #### Demos
 #### User guide
 #### Code example
+```javascript
+//layers
+var evolutionStages = {
+"<strong>El lugar</strong>": thePlace,
+"<strong>Antes del siglo XII</strong>": prerromanesqueSpaces,
+"<strong>Del siglo XII al XV</strong>": romanesqueSpaces,
+"<strong>Primera mitad del siglo XVI</strong>": firstHalf16thCentury,
+"<strong>Segunda mitad del siglo XVI</strong>": secondHalf16thCentury,
+"<strong>Primera mitad del siglo XVII</strong>": firstHalf17thCentury,
+"<strong>Segunda mitad del siglo XVII</strong>": secondHalf17thCentury,
+};
+
+//text sections
+var text = "left_column",
+place = "marker01",
+preroman = "marker02",
+roman = "marker03",
+first16 = "marker04",
+second16 = "marker05",
+first17 = "marker06",
+second17 = "marker07";
+
+texts = [place, preroman, roman, first16, second16, first17, second17];
+layers = [thePlace, prerromanesqueSpaces, romanesqueSpaces, firstHalf16thCentury, secondHalf16thCentury, firstHalf17thCentury, secondHalf17thCentury];
+		
+	
+
+let demo = L.narrativeIntegration();
+demo.readJSONData("left_column", "./data_json/data.json");
+demo.changeTextWithLayer(texts);
+demo.changeLayerWithText(texts, layers);
+```
 #### API
 |Method|Returns|Description|
 |---|---|---|
